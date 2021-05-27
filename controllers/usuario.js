@@ -3,10 +3,20 @@ const Usuario = require('../models/usuario');
 const bcryptjs = require('bcryptjs');
 
 const usuarioGet = (req, res = response) => {
+
+    const { limit = 100, from = 0} = req.query;
+
+    const usuarios = await Usuario.find()
+        .skip( Number( from ) )
+        .limit( Number( limit ) )
+
+    const total = await Usuario.countDocuments();
+    
     res.status(200).json({
-        ok: true,
-        msg: 'GET API'
-    });
+        total,
+        usuarios
+    })
+
 };
 
 const usuarioPost = async(req, res = response) => {
